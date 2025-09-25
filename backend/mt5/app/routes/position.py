@@ -3,13 +3,16 @@ import MetaTrader5 as mt5
 import logging
 from lib import close_position, close_all_positions, get_positions
 from flasgger import swag_from
+from routes.auth import require_auth  # ✅ Importar middleware
 
 position_bp = Blueprint('position', __name__)
 logger = logging.getLogger(__name__)
 
 @position_bp.route('/close_position', methods=['POST'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Position'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'body',
@@ -84,8 +87,10 @@ def close_position_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @position_bp.route('/close_all_positions', methods=['POST'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Position'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'body',
@@ -157,8 +162,10 @@ def close_all_positions_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @position_bp.route('/modify_sl_tp', methods=['POST'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Position'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'body',
@@ -237,8 +244,10 @@ def modify_sl_tp_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @position_bp.route('/get_positions', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Position'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'magic',
@@ -311,8 +320,10 @@ def get_positions_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @position_bp.route('/positions_total', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Position'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'responses': {
         200: {
             'description': 'Total number of open positions retrieved successfully.',

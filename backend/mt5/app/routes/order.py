@@ -2,13 +2,16 @@ from flask import Blueprint, jsonify, request
 import MetaTrader5 as mt5
 import logging
 from flasgger import swag_from
+from routes.auth import require_auth  # ✅ Importar middleware
 
 order_bp = Blueprint('order', __name__)
 logger = logging.getLogger(__name__)
 
 @order_bp.route('/order', methods=['POST'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Order'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'body',

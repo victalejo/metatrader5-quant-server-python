@@ -4,13 +4,16 @@ import logging
 from datetime import datetime
 from flasgger import swag_from
 from lib import get_deal_from_ticket, get_order_from_ticket
+from routes.auth import require_auth  # ✅ Importar middleware
 
 history_bp = Blueprint('history', __name__)
 logger = logging.getLogger(__name__)
 
 @history_bp.route('/get_deal_from_ticket', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['History'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'ticket',
@@ -77,8 +80,10 @@ def get_deal_from_ticket_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @history_bp.route('/get_order_from_ticket', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['History'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'ticket',
@@ -135,8 +140,10 @@ def get_order_from_ticket_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @history_bp.route('/history_deals_get', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['History'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'from_date',
@@ -219,8 +226,10 @@ def history_deals_get_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @history_bp.route('/history_orders_get', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['History'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'ticket',

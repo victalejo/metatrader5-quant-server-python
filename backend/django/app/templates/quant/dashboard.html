@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard MT5</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">📈 MT5 Dashboard</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{% url 'mt5_logout' %}">🚪 Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Información de la Cuenta -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>💰 Información de la Cuenta</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if account_info %}
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <strong>Login:</strong> {{ account_info.login }}
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>Balance:</strong> ${{ account_info.balance|floatformat:2 }}
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>Equity:</strong> ${{ account_info.equity|floatformat:2 }}
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>Margen:</strong> ${{ account_info.margin|floatformat:2 }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No se pudo obtener la información de la cuenta</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Posiciones Abiertas -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📊 Posiciones Abiertas</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if positions and positions.positions %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Ticket</th>
+                                            <th>Símbolo</th>
+                                            <th>Tipo</th>
+                                            <th>Volumen</th>
+                                            <th>Precio Apertura</th>
+                                            <th>SL</th>
+                                            <th>TP</th>
+                                            <th>Beneficio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for position in positions.positions %}
+                                        <tr>
+                                            <td>{{ position.ticket }}</td>
+                                            <td>{{ position.symbol }}</td>
+                                            <td>
+                                                <span class="badge bg-{% if position.type == 0 %}success{% else %}danger{% endif %}">
+                                                    {% if position.type == 0 %}BUY{% else %}SELL{% endif %}
+                                                </span>
+                                            </td>
+                                            <td>{{ position.volume }}</td>
+                                            <td>{{ position.price_open|floatformat:5 }}</td>
+                                            <td>{{ position.sl|floatformat:5|default:"-" }}</td>
+                                            <td>{{ position.tp|floatformat:5|default:"-" }}</td>
+                                            <td class="{% if position.profit >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                                ${{ position.profit|floatformat:2 }}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No hay posiciones abiertas</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>⚡ Acciones Rápidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary" onclick="refreshData()">
+                                🔄 Actualizar Datos
+                            </button>
+                            <button class="btn btn-outline-success" onclick="openOrder()">
+                                📈 Nueva Orden
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="closeAllPositions()">
+                                🔒 Cerrar Todas las Posiciones
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function refreshData() {
+            location.reload();
+        }
+
+        function openOrder() {
+            alert('Funcionalidad de orden nueva - Por implementar');
+        }
+
+        function closeAllPositions() {
+            if (confirm('¿Estás seguro de que quieres cerrar todas las posiciones?')) {
+                alert('Funcionalidad de cerrar todas las posiciones - Por implementar');
+            }
+        }
+    </script>
+</body>
+</html>

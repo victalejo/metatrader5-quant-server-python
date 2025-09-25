@@ -2,13 +2,16 @@ from flask import Blueprint, jsonify
 import MetaTrader5 as mt5
 from flasgger import swag_from
 import logging
+from routes.auth import require_auth  # ✅ Importar middleware
 
 symbol_bp = Blueprint('symbol', __name__)
 logger = logging.getLogger(__name__)
 
 @symbol_bp.route('/symbol_info_tick/<symbol>', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Symbol'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'symbol',
@@ -51,8 +54,10 @@ def get_symbol_info_tick_endpoint(symbol):
     return jsonify(tick_dict)
 
 @symbol_bp.route('/symbol_info/<symbol>', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Symbol'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'symbol',

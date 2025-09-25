@@ -254,7 +254,7 @@ services:
       - prometheus
       - traefik
     ports:
-      - 3000:3000
+      - 3001:3000
     cpus: 0.5
     mem_limit: 512m
     networks:

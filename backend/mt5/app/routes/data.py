@@ -6,13 +6,16 @@ import pytz
 import pandas as pd
 from flasgger import swag_from
 from lib import get_timeframe
+from routes.auth import require_auth  # ✅ Importar middleware
 
 data_bp = Blueprint('data', __name__)
 logger = logging.getLogger(__name__)
 
 @data_bp.route('/fetch_data_pos', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Data'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'symbol',
@@ -101,8 +104,10 @@ def fetch_data_pos_endpoint():
         return jsonify({"error": "Internal server error"}), 500
 
 @data_bp.route('/fetch_data_range', methods=['GET'])
+@require_auth  # ✅ Añadir protección
 @swag_from({
     'tags': ['Data'],
+    'security': [{'ApiKeyAuth': []}],  # ✅ Actualizar Swagger
     'parameters': [
         {
             'name': 'symbol',

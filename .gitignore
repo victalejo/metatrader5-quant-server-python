@@ -60,7 +60,6 @@ yarn-error.log*
 
 # Local env files
 .env*.local
-.env
 
 # Vercel
 .vercel
@@ -92,3 +91,5 @@ logs
 
 # Database
 *.sqlite3
+
+/config
